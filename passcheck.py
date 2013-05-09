@@ -22,8 +22,8 @@ import sys
 
 
 def evaluate(data):
-    rc = 0
-    return rc
+    rc = 4.5
+    return rc // 1
 
 
 raw = ('--raw' in sys.argv[1:]) or ('-r' in sys.argv[1:])
@@ -40,7 +40,7 @@ while True:
     passphrase = []
     if raw:
         passphrase = line
-    else
+    else:
         escape = False
         for c in line:
             if escape:
