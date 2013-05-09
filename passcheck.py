@@ -18,3 +18,32 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # 
 
+import sys
+
+
+while True:
+    line = []
+    try:
+        while True:
+            c = sys.stdin.buffer.read(1)[0]
+            if c == 10:
+                break
+            line.append(c)
+    except:
+        break
+    passphrase = []
+    escape = False
+    for c in line:
+        if escape:
+            if (c == ord('~')) or (ord('a') <= c <= ord('z')) or (ord('A') <= c <= ord('Z')):
+                escape = False
+        elif c == ord('\033'):
+            escape = True
+        else:
+            passphrase.append(c)
+    rating = 0
+    sys.stdout.buffer.write(('%i \033[34m' % rating).encode('utf-8'))
+    sys.stdout.buffer.write(bytes(line))
+    sys.stdout.buffer.write('\033[00m\n'.encode('utf-8'))
+    sys.stdout.buffer.flush()
+
