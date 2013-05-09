@@ -21,6 +21,12 @@
 import sys
 
 
+def evaluate(data):
+    rc = 0
+    return rc
+
+
+raw = ('--raw' in sys.argv[1:]) or ('-r' in sys.argv[1:])
 while True:
     line = []
     try:
@@ -32,16 +38,19 @@ while True:
     except:
         break
     passphrase = []
-    escape = False
-    for c in line:
-        if escape:
-            if (c == ord('~')) or (ord('a') <= c <= ord('z')) or (ord('A') <= c <= ord('Z')):
-                escape = False
-        elif c == ord('\033'):
-            escape = True
-        else:
-            passphrase.append(c)
-    rating = 0
+    if raw:
+        passphrase = line
+    else
+        escape = False
+        for c in line:
+            if escape:
+                if (c == ord('~')) or (ord('a') <= c <= ord('z')) or (ord('A') <= c <= ord('Z')):
+                    escape = False
+            elif c == ord('\033'):
+                escape = True
+            else:
+                passphrase.append(c)
+    rating = evaluate(passphrase)
     sys.stdout.buffer.write(('%i \033[34m' % rating).encode('utf-8'))
     sys.stdout.buffer.write(bytes(line))
     sys.stdout.buffer.write('\033[00m\n'.encode('utf-8'))
