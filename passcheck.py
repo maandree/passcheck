@@ -110,6 +110,11 @@ def evaluate(data):
     return (rc + 0.5) // 1
 
 
+blacklist = None
+with open('blacklist', 'rb') as file:
+    blacklist = set(file.read().decode('utf-8', 'replace').split('\n'))
+
+
 raw = ('--raw' in sys.argv[1:]) or ('-r' in sys.argv[1:])
 while True:
     line = []
@@ -134,7 +139,7 @@ while True:
                 escape = True
             else:
                 passphrase.append(c)
-    rating = evaluate(passphrase)
+    rating = 0 if ''.join([chr(c) for c in passphrase]) in blacklist else evaluate(passphrase)
     sys.stdout.buffer.write(('%i \033[34m' % rating).encode('utf-8'))
     sys.stdout.buffer.write(bytes(line))
     sys.stdout.buffer.write('\033[00m\n'.encode('utf-8'))
