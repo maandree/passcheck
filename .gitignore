@@ -8,3 +8,8 @@ __pycache__/
 *.swp
 *.swo
 *.pyc
+*.info
+*.dvi
+*.pdf
+*.ps
+*.gz
