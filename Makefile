@@ -23,7 +23,7 @@ info: passcheck.info.gz
 
 passcheck.install: passcheck.py
 	cp "$<" "$@"
-	sed -i "s:'blacklist':'$(DESTDIR)$(PREFIX)$(SHARE)/misc/$(PKGNAME).blacklist':g" "$@"
+	sed -i "s:'blacklist':'$(PREFIX)$(SHARE)/misc/$(PKGNAME).blacklist':g" "$@"
 
 install: install-cmd install-license install-info
 
