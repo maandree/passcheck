@@ -3,7 +3,7 @@
 pkgname=passcheck
 pkgver=1
 pkgrel=1
-pkgdesc='Passphrase strenght evaluater'
+pkgdesc='Passphrase strength evaluater'
 arch=('any')
 url='https://github.com/maandree/passcheck'
 license=('GPL3')
