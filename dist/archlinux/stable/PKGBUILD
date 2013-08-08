@@ -8,7 +8,7 @@ arch=('any')
 url='https://github.com/maandree/passcheck'
 license=('GPL3')
 depends=('python3')
-makedepends=('make' 'sed' 'coreutils' 'texinfo' 'gzip')
+makedepends=('make' 'sed' 'coreutils' 'texinfo' 'gzip' 'auto-auto-complete')
 source=(https://github.com/maandree/passcheck/archive/$pkgver.tar.gz)
 sha256sums=(ee7696f1d12ccb2d76a9b235fe759f899e4fca890852741937b0f0004ec534db)
 

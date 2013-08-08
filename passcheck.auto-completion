@@ -1,0 +1,4 @@
+(passcheck
+	(unargumented  (options -r --raw)  (complete --raw)  (desc 'Treat escape sequences as part of the passphrases'))
+)
+
