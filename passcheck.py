@@ -60,9 +60,9 @@ def distance(a, b):
     for x in range(len(L1)):
         keys[L1[x]] = (x, 0)
     for x in range(len(L2)):
-        keys[L2[x]] = (x + 0.25, 1)
+        keys[L2[x]] = (x + 0.5, 1)
     for x in range(len(L3)):
-        keys[L3[x]] = (x + 0.5, 2)
+        keys[L3[x]] = (x + 0.75, 2)
     for x in range(len(L4)):
         keys[L4[x]] = (x + 1, 3)
     for c in (a, b):
