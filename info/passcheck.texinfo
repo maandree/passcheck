@@ -63,7 +63,7 @@ Texts. A copy of the license is included in the section entitled
 
 @command{passcheck} is a tool that rates passphrases based on the strengths,
 a highly rated passphrase is a string passphrase. You are recommended not to
-use any passphrases rated below 250.
+use any passphrases rated below 300.
 
 Passphrases are read from stdin and the rating followed by the passphrase
 for each passphrases is written to stdout, and stderr is quited unless the

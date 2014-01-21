@@ -96,7 +96,7 @@ def evaluate(data):
             r = 3
         classes[r - 1] += 1
         if last is not None:
-            r = distance(c, last) / 5
+            r = distance(c, last)
             rc += r ** 0.5
         last = c
     if rc >= 0:
