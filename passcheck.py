@@ -50,6 +50,7 @@ def _class(char):
 
 
 def distance(a, b):
+    a, b = a.lower(), b.lower()
     if a == b:
         return 0
     L1 = '1234567890'
