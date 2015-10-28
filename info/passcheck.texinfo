@@ -1,4 +1,4 @@
-pas\input texinfo   @c -*-texinfo-*-
+\input texinfo   @c -*-texinfo-*-
 
 @c %**start of header
 @setfilename passcheck.info
@@ -12,7 +12,7 @@ pas\input texinfo   @c -*-texinfo-*-
 
 @dircategory Security
 @direntry
-* passcheck: (passcheck).            Passphrase strenght evaluater
+* passcheck: (passcheck).            Passphrase strength evaluator
 @end direntry
 
 
@@ -31,13 +31,13 @@ Texts. A copy of the license is included in the section entitled
 
 @ifnottex
 @node Top
-@top passcheck -- Passphrase strenght evaluater
+@top passcheck -- Passphrase strength evaluator
 @insertcopying
 @end ifnottex
 
 @titlepage
 @title passcheck
-@subtitle Passphrase strenght evaluater
+@subtitle Passphrase strength evaluator
 @author by Mattias Andrée (maandree)
 
 @page

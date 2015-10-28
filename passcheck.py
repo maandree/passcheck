@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # 
-# passcheck – passphrase strenght evaluater
+# passcheck – passphrase strenght evaluator
 # 
 # Copyright © 2013  Mattias Andrée (maandree@member.fsf.org)
 # 
