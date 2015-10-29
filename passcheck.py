@@ -113,8 +113,12 @@ def evaluate(data):
 
 
 blacklist = None
-with open('blacklist', 'rb') as file:
-    blacklist = set(file.read().decode('utf-8', 'replace').split('\n'))
+try:
+    with open('blacklist', 'rb') as file:
+        blacklist = set(file.read().decode('utf-8', 'replace').split('\n'))
+except FileNotFoundError:
+    sys.stderr.write('File "blacklist" from the git branch "large-files" is not present.\n');
+    sys.exit(1)
 for directory in ['/usr/share/dict/', '/usr/local/share/dict/']:
     dictionaries = None
     try:
