@@ -1,0 +1,6 @@
+*
+!PKGBUILD
+!passcheck.install
+!.git*
+*~
+

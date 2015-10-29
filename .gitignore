@@ -1,7 +1,5 @@
 _/
 __pycache__/
-/dist/*/*/*
-!/dist/archlinux/*/PKGBUILD
 \#*\#
 .*
 !.git*
