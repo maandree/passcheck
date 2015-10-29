@@ -24,11 +24,10 @@ passcheck.install: passcheck.py
 
 doc: info
 
-info: passcheck.info.gz
+info: passcheck.info
 
-%.info.gz: info/%.texinfo
+%.info: info/%.texinfo
 	makeinfo "$<"
-	gzip -9 -f "$*.info"
 
 
 shell: bash fish zsh
@@ -59,9 +58,9 @@ install-license:
 	install -dm755 -- "$(DESTDIR)$(LICENSES)/$(PKGNAME)"
 	install -m644 COPYING LICENSE -- "$(DESTDIR)$(LICENSES)/$(PKGNAME)"
 
-install-info: passcheck.info.gz
+install-info: passcheck.info
 	install -dm755 -- "$(DESTDIR)$(PREFIX)$(DATA)/info"
-	install -m644 passcheck.info.gz -- "$(DESTDIR)$(PREFIX)$(DATA)/info/$(PKGNAME).info.gz"
+	install -m644 passcheck.info -- "$(DESTDIR)$(PREFIX)$(DATA)/info/$(PKGNAME).info"
 
 install-bash: bash
 	install -Dm644 passcheck.bash-completion -- "$(DESTDIR)$(PREFIX)$(DATA)/bash-completion/completions/$(COMMAND)"
@@ -79,7 +78,7 @@ uninstall:
 	-rm -- "$(DESTDIR)$(LICENSES)/$(PKGNAME)/COPYING"
 	-rm -- "$(DESTDIR)$(LICENSES)/$(PKGNAME)/LICENSE"
 	-rmdir -- "$(DESTDIR)$(LICENSES)/$(PKGNAME)"
-	-rm -- "$(DESTDIR)$(PREFIX)$(DATA)/info/$(PKGNAME).info.gz"
+	-rm -- "$(DESTDIR)$(PREFIX)$(DATA)/info/$(PKGNAME).info"
 	-rm -- "$(DESTDIR)$(PREFIX)$(DATA)/bash-completion/completions/$(COMMAND)"
 	-rm -- "$(DESTDIR)$(PREFIX)$(DATA)/fish/completions/$(COMMAND).fish"
 	-rm -- "$(DESTDIR)$(PREFIX)$(DATA)/zsh/site-functions/_$(COMMAND)"
