@@ -19,6 +19,7 @@
 # 
 
 import sys
+import os
 
 
 def _class(char):
@@ -114,6 +115,17 @@ def evaluate(data):
 blacklist = None
 with open('blacklist', 'rb') as file:
     blacklist = set(file.read().decode('utf-8', 'replace').split('\n'))
+for directory in ['/usr/share/dict/', '/usr/local/share/dict/']:
+    dictionaries = None
+    try:
+        dictionaries = os.listdir(directory)
+    except FileNotFoundError:
+        pass
+    if dictionaries is not None:
+        for dictionary in dictionaries:
+            if not os.path.isdir(directory + dictionary):
+                with open(directory + dictionary, 'rb') as file:
+                    blacklist.update(set(file.read().decode('utf-8', 'replace').split('\n')))
 
 
 raw = ('--raw' in sys.argv[1:]) or ('-r' in sys.argv[1:])

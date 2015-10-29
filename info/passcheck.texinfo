@@ -98,6 +98,10 @@ the strength of a passphrase:
 The passphrase is not a commonly use passphrase.
 Currently a top-1000 list is used.
 @item
+The passphrase is not a word listed in a file
+inside either ofthe directory @file{/usr/share/dict/}
+abd @file{/usr/local/share/dict/}.
+@item
 The degree to which characters are mixed.
 @item
 The classes of used characters. For example non-ASCII
