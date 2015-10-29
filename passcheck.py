@@ -114,6 +114,11 @@ def evaluate(data):
 
 blacklist = None
 try:
+    # TODO Converting into a set should be opt-in, and is an optimisation
+    #      for servers that have the process running indefinitely can
+    #      continuously feeds passphrases to it. On personal computers,
+    #      it is better to do a binary search of the file without loading
+    #      it completely.
     with open('blacklist', 'rb') as file:
         blacklist = set(file.read().decode('utf-8', 'replace').split('\n'))
 except FileNotFoundError:
