@@ -17,7 +17,7 @@
 
 
 @copying
-Copyright @copyright{} 2013 Mattias Andrée
+Copyright @copyright{} 2013, 2015 Mattias Andrée
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -70,7 +70,7 @@ for each passphrases is written to stdout, and stderr is quited unless the
 program files.
 
 Currently, evaluation based on grammar is not made, so please manually
-change that the passphrase you choose does not form a grammatically
+check that the passphrase you choose does not form a grammatically
 correct sentence, and preferably, not even in part.
 
 
