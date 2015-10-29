@@ -1,7 +1,7 @@
 passcheck is a tool that rates passphrases based on the strengths,
 a highly rated passphrase is a string passphrase.
 
-Personally I suggest not using any passphrases rated below 250.
+Personally I suggest not using any passphrases rated below 300.
 
 The program parses each line (must end exactly with one UNIX line break)
 as a passphrase and puts the (positive integer) rating before the passphrase
