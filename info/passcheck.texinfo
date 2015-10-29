@@ -53,6 +53,7 @@ Texts. A copy of the license is included in the section entitled
 @menu
 * Overview::                        Brief overview of @command{passcheck}.
 * Invoking::                        Executing @command{passcheck}.
+* Factors::                         Factors weighted in at evaulation.
 * GNU Free Documentation License::  Copying and sharing this manual.
 @end menu
 
@@ -69,16 +70,6 @@ Passphrases are read from stdin and the rating followed by the passphrase
 for each passphrases is written to stdout, and stderr is quited unless the
 program files.
 
-It has been argued that passphrases should not form grammatically
-correct sentence, even if the sentence itself if nonsense. The argument
-is that the majority of possible choices of words can be eliminated for
-each word position, based on the previous word. However a counterargument
-for this concern is that number of possible combinations, assuming the
-sentence is nonsensical, large enough even if choices can be eliminated
-using grammar. Currently, evaluation based on grammar is not made, so if
-you believe grammatically correct sentence should be avoided, please
-manually check that the passphrase you choose does not form a grammatically
-correct sentence, and preferably, not even in part.
 
 
 @node Invoking
@@ -94,6 +85,40 @@ at the bottom.
 Use @option{--raw} or @option{-r} if the passphrase may contain a ESC character,
 otherwise it is parsed as an ANSI escape sequence wish is ignored in the rating
 and allows you to use colours in the passphrases.
+
+
+
+@node Factors
+@chapter Factors
+
+@command{passcheck} weights in the following factors when evaluating
+the strength of a passphrase:
+@itemize @bullet
+@item
+The passphrase is not a commonly use passphrase.
+Currently a top-1000 list is used.
+@item
+The degree to which characters are mixed.
+@item
+The classes of used characters. For example non-ASCII
+characters are better than ASCII chracters.
+@item
+The distance, on a QWERTY-keyboard, of successive keys.
+@item
+The length of the passphrase.
+@end itemize
+
+It has been argued that passphrases should not form grammatically
+correct sentence, even if the sentence itself if nonsense. The argument
+is that the majority of possible choices of words can be eliminated for
+each word position, based on the previous word. However a counterargument
+for this concern is that number of possible combinations, assuming the
+sentence is nonsensical, large enough even if choices can be eliminated
+using grammar. Currently, evaluation based on grammar is not made, so if
+you believe grammatically correct sentence should be avoided, please
+manually check that the passphrase you choose does not form a grammatically
+correct sentence, and preferably, not even in part.
+
 
 
 @node GNU Free Documentation License
