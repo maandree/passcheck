@@ -15,4 +15,5 @@ __pycache__/
 *.ps
 *.gz
 /passcheck.*sh-completion
+blacklist
 
