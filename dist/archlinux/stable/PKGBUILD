@@ -11,6 +11,7 @@ depends=('python3')
 makedepends=('make' 'sed' 'coreutils' 'texinfo' 'auto-auto-complete')
 install=passcheck.install
 source=(https://github.com/maandree/passcheck/archive/$pkgver.tar.gz)
+# TODO large-files should be added
 sha256sums=(901483f7e4d111f0e1135e16d60e4c573ff72e39bac0c4337df7b46ac62780ec)
 
 
