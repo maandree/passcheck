@@ -69,8 +69,15 @@ Passphrases are read from stdin and the rating followed by the passphrase
 for each passphrases is written to stdout, and stderr is quited unless the
 program files.
 
-Currently, evaluation based on grammar is not made, so please manually
-check that the passphrase you choose does not form a grammatically
+It has been argued that passphrases should not form grammatically
+correct sentence, even if the sentence itself if nonsense. The argument
+is that the majority of possible choices of words can be eliminated for
+each word position, based on the previous word. However a counterargument
+for this concern is that number of possible combinations, assuming the
+sentence is nonsensical, large enough even if choices can be eliminated
+using grammar. Currently, evaluation based on grammar is not made, so if
+you believe grammatically correct sentence should be avoided, please
+manually check that the passphrase you choose does not form a grammatically
 correct sentence, and preferably, not even in part.
 
 
