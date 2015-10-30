@@ -97,8 +97,8 @@ the strength of a passphrase:
 @item
 The passphrase is not a known real passphrase.
 Currently a list of 5189414 leaked passphrases is is used.
-This list is created from a top-1000 list and a document
-of 10 million username--passphrase combinations.
+This list is created from several password leaks, name
+lists, and dictionaries.
 @item
 The passphrase is not a word listed in a file
 inside either ofthe directory @file{/usr/share/dict/}
