@@ -73,6 +73,76 @@ def distance(a, b):
     return ((keys[a][0] - keys[b][0]) ** 2 + (keys[a][1] - keys[b][1]) ** 2) ** 0.5
 
 
+def search_cmp(haystack, needle):
+    haystack = haystack + [10]
+    h, n = 0, 0
+    too_low = False
+    too_high = False
+    while True:
+        while True:
+            hh, nn = haystack[h], needle[n]
+            if (hh == 10) or (nn == 10):
+                if hh == nn:
+                    return 0
+                break
+            else:
+                d = hh - nn
+                if d != 0:
+                    if d < 0:
+                        too_low = True
+                        break
+                    else:
+                        return None if too_low else 1
+            h, n = h + 1, n + 1
+        h, n = h + haystack[h:].index(10) + 1, 0
+        too_low  = too_low  or (hh == 10)
+        too_high = too_high or (nn == 10)
+        if h == len(haystack):
+            return None if (too_low and too_high) else (-1 if too_low else 1)
+
+def search_file(fd, filesize, passphrase):
+    blocksize = 4096
+    minimum = 0
+    maximum = filesize - 1
+    passphrase = passphrase + [10]
+    while minimum <= maximum:
+        middle = (minimum + maximum) // 2
+        middle -= middle % blocksize
+        middle_low = None
+        continues = 0
+        data = []
+        while True:
+            data.extend(list(os.pread(fd, blocksize, middle + continues * blocksize)))
+            if middle_low is None:
+                middle_low = 0
+                if middle > 0:
+                    try:
+                        middle_low = data.index(10)
+                    except ValueError:
+                        middle_low = None
+                        continue
+            if middle + len(data) >= filesize:
+                middle_high = len(data)
+            else:
+                middle_high = len(data) - 1
+                while (middle_high > middle_low) and (data[middle_high] != 10):
+                    middle_high -= 1
+                if middle_high <= middle_low:
+                    continue
+            if middle > 0:
+                middle_low += 1
+            break
+        v = search_cmp(data[middle_low : middle_high], passphrase)
+        if v is None:
+            return False
+        elif v < 0:
+            minimum = middle + middle_low + 1
+        elif v > 0:
+            maximum = middle + middle_high
+        else:
+            return True
+    return False
+
 
 def evaluate(data):
     rc = 0
@@ -117,8 +187,8 @@ waste_ram = ('--waste-ram' in sys.argv[1:]) or ('-w' in sys.argv[1:])
 raw = ('--raw' in sys.argv[1:]) or ('-r' in sys.argv[1:])
 
 
+blacklist_files = []
 if waste_ram:
-    blacklist = None
     try:
         with open('blacklist', 'rb') as file:
             blacklist = set(file.read().decode('utf-8', 'replace').split('\n'))
@@ -126,7 +196,9 @@ if waste_ram:
         sys.stderr.write('File "blacklist" from the git branch "large-files" is not present.\n');
         sys.exit(1)
 else:
-    pass # TODO
+    blacklist = set([])
+    fd = os.open('blacklist', os.O_RDONLY)
+    blacklist_files.append((fd, os.fstat(fd).st_size))
 for directory in ['/usr/share/dict/', '/usr/local/share/dict/']:
     dictionaries = None
     try:
@@ -163,7 +235,16 @@ while True:
                 escape = True
             else:
                 passphrase.append(c)
-    rating = 0 if ''.join([chr(c) for c in passphrase]) in blacklist else evaluate(passphrase)
+    rating = None
+    if ''.join([chr(c) for c in passphrase]) in blacklist:
+        rating = 0
+    else:
+        for fd, filesize in blacklist_files:
+            if search_file(fd, filesize, passphrase):
+                rating = 0
+                break
+    if rating is None:
+        rating = evaluate(passphrase)
     sys.stdout.buffer.write(('%i \033[34m' % rating).encode('utf-8'))
     sys.stdout.buffer.write(bytes(line))
     sys.stdout.buffer.write('\033[00m\n'.encode('utf-8'))
