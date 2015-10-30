@@ -1,24 +1,8 @@
-passcheck is a tool that rates passphrases based on the strengths,
-a highly rated passphrase is a string passphrase.
+passcheck is a tool that rates passphrases based on the strengths.
+High rates equal strong passphrases. Zero equals blacklisted, this,
+a leak password, a word from a dictionary, or a name.
 
 Personally I suggest not using any passphrases rated below 300.
 
-The program parses each line (must end exactly with one UNIX line break)
-as a passphrase and puts the (positive integer) rating before the passphrase
-seperated with one blankspace.
-
-The program supports colour in the passphrase and ignores them unless
---raw (or -r) is used as an option. This is done because colours cannot
-be copied from any regular terminal.
-
-Passphrases are read from stdin and the rating followed by the passphrase
-for each passphrases is written to stdout, and stderr is quited unless the
-program files.
-
-You may want to pipe stdout to `sort -n` to get the strongest passphrase
-at the bottom.
-
-Currently, evaluation based on grammar is not made, so please manually
-change that the passphrase you choose does not form a grammatically
-correct sentence, and preferably, not even in part.
+Read the info manual for more information.
 
