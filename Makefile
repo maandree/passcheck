@@ -12,7 +12,7 @@ LICENSES = $(PREFIX)$(DATA)
 
 
 
-all: command doc shell
+all: command data doc shell
 
 
 command: passcheck.install
@@ -20,6 +20,13 @@ command: passcheck.install
 passcheck.install: passcheck.py
 	cp "$<" "$@"
 	sed -i "s:'blacklist':'$(PREFIX)$(DATA)/misc/$(PKGNAME).blacklist':g" "$@"
+
+
+data: blacklist
+
+blacklist: blacklist.lrz
+	@printf '\e[0;1;35m%s\e[0m\n' 'Decompression blacklist.lzp, this can take a very long time (over 1 CPU-hour)'
+	lrzip -d "$@"
 
 
 doc: info
@@ -45,30 +52,37 @@ passcheck.%sh-completion: passcheck.auto-completion.install
 
 
 
-.PHONY:  install-cmd install-license install-info install-bash install-fish install-zsh
-install: install-cmd install-license install-info install-bash install-fish install-zsh
+install: install-cmd install-data install-license install-doc install-shell
 
-install-cmd:
+install-cmd: passcheck.install
 	install -dm755 -- "$(DESTDIR)$(PREFIX)$(BIN)"
-	install -dm755 -- "$(DESTDIR)$(PREFIX)$(DATA)/misc"
 	install -m755 passcheck.install -- "$(DESTDIR)$(PREFIX)$(BIN)/$(COMMAND)"
+
+install-data: install-blacklist
+
+install-blacklist: blacklist
+	install -dm755 -- "$(DESTDIR)$(PREFIX)$(DATA)/misc"
 	install -m644 blacklist -- "$(DESTDIR)$(PREFIX)$(DATA)/misc/$(PKGNAME).blacklist"
 
 install-license:
 	install -dm755 -- "$(DESTDIR)$(LICENSES)/$(PKGNAME)"
 	install -m644 COPYING LICENSE -- "$(DESTDIR)$(LICENSES)/$(PKGNAME)"
 
+install-doc: install-info
+
 install-info: passcheck.info
 	install -dm755 -- "$(DESTDIR)$(PREFIX)$(DATA)/info"
 	install -m644 passcheck.info -- "$(DESTDIR)$(PREFIX)$(DATA)/info/$(PKGNAME).info"
 
-install-bash: bash
+install-shell: install-bash install-fish install-zsh
+
+install-bash: passcheck.bash-completion
 	install -Dm644 passcheck.bash-completion -- "$(DESTDIR)$(PREFIX)$(DATA)/bash-completion/completions/$(COMMAND)"
 
-install-fish: fish
+install-fish: passcheck.fish-completion
 	install -Dm644 passcheck.fish-completion -- "$(DESTDIR)$(PREFIX)$(DATA)/fish/completions/$(COMMAND).fish"
 
-install-zsh: zsh
+install-zsh: passcheck.zsh-completion
 	install -Dm644 passcheck.zsh-completion -- "$(DESTDIR)$(PREFIX)$(DATA)/zsh/site-functions/_$(COMMAND)"
 
 
@@ -82,6 +96,8 @@ uninstall:
 	-rm -- "$(DESTDIR)$(PREFIX)$(DATA)/bash-completion/completions/$(COMMAND)"
 	-rm -- "$(DESTDIR)$(PREFIX)$(DATA)/fish/completions/$(COMMAND).fish"
 	-rm -- "$(DESTDIR)$(PREFIX)$(DATA)/zsh/site-functions/_$(COMMAND)"
+	-rmdir -- "$(DESTDIR)$(PREFIX)$(DATA)/misc"
+	-rm -- "$(DESTDIR)$(PREFIX)$(DATA)/misc/$(PKGNAME).blacklist"
 
 
 
@@ -90,5 +106,5 @@ clean:
 
 
 
-.PHONY: all cmd doc info shell bash fish zsh install uninstall clean
+.PHONY: all command data doc info shell bash fish zsh install install-cmd install-data install-blacklist install-license install-doc install-info install-shell install-bash install-fish install-zsh uninstall clean
 
