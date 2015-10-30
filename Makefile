@@ -26,7 +26,7 @@ data: blacklist
 
 blacklist: blacklist.lrz
 	@printf '\e[0;1;35m%s\e[0m\n' 'Decompression blacklist.lzp, this can take a very long time (over 1 CPU-hour)'
-	lrzip -d "$@"
+	lrzip -d "$<"
 
 
 doc: info
