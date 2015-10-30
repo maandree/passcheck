@@ -112,18 +112,21 @@ def evaluate(data):
     return (rc + 0.5) // 1
 
 
-blacklist = None
-try:
-    # TODO Converting into a set should be opt-in, and is an optimisation
-    #      for servers that have the process running indefinitely can
-    #      continuously feeds passphrases to it. On personal computers,
-    #      it is better to do a binary search of the file without loading
-    #      it completely.
-    with open('blacklist', 'rb') as file:
-        blacklist = set(file.read().decode('utf-8', 'replace').split('\n'))
-except FileNotFoundError:
-    sys.stderr.write('File "blacklist" from the git branch "large-files" is not present.\n');
-    sys.exit(1)
+
+waste_ram = ('--waste-ram' in sys.argv[1:]) or ('-w' in sys.argv[1:])
+raw = ('--raw' in sys.argv[1:]) or ('-r' in sys.argv[1:])
+
+
+if waste_ram:
+    blacklist = None
+    try:
+        with open('blacklist', 'rb') as file:
+            blacklist = set(file.read().decode('utf-8', 'replace').split('\n'))
+    except FileNotFoundError:
+        sys.stderr.write('File "blacklist" from the git branch "large-files" is not present.\n');
+        sys.exit(1)
+else:
+    pass # TODO
 for directory in ['/usr/share/dict/', '/usr/local/share/dict/']:
     dictionaries = None
     try:
@@ -137,7 +140,6 @@ for directory in ['/usr/share/dict/', '/usr/local/share/dict/']:
                     blacklist.update(set(file.read().decode('utf-8', 'replace').split('\n')))
 
 
-raw = ('--raw' in sys.argv[1:]) or ('-r' in sys.argv[1:])
 while True:
     line = []
     try:
