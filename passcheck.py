@@ -100,6 +100,15 @@ def search_cmp(haystack, needle):
         if h == len(haystack):
             return None if (too_low and too_high) else (-1 if too_low else 1)
 
+def pread_full(fd, bs, offset, output):
+    got_total = 0
+    while got_total < bs:
+        got = list(os.pread(fd, bs - got_total, offset + got_total))
+        if len(got) == 0:
+            break
+        got_total += len(got)
+        output.extend(got)
+
 def search_file(fd, filesize, passphrase):
     blocksize = 4096
     minimum = 0
@@ -112,7 +121,7 @@ def search_file(fd, filesize, passphrase):
         continues = 0
         data = []
         while True:
-            data.extend(list(os.pread(fd, blocksize, middle + continues * blocksize)))
+            pread_full(fd, blocksize, middle + continues * blocksize, data)
             if middle_low is None:
                 middle_low = 0
                 if middle > 0:
