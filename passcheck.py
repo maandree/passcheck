@@ -55,7 +55,7 @@ def distance(a, b):
     if a == b:
         return 0
     L1 = '1234567890'
-    L2 = 'wertyuiop'
+    L2 = 'qwertyuiop'
     L3 = 'asdfghjkl'
     L4 = 'zxcvbnm'
     keys = {}
