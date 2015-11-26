@@ -1,8 +1,41 @@
-passcheck is a tool that rates passphrases based on the strengths.
-High rates equal strong passphrases. Zero equals blacklisted, this,
-a leak password, a word from a dictionary, or a name.
+NAME
+	passcheck - passphrase strength evaluator
 
-Personally I suggest not using any passphrases rated below 300.
+SYNOPSIS
+	passcheck [OPTION]... < PASSPHRASE_LIST
 
-Read the info manual for more information.
+DESCRIPTION
+	Evaluates the strength of passphrases based.
+	All passphrases are given a non-negative integer rating.
+
+	The output is formatted so that it is suitable for
+	piping into 'sort -rn' to sort passphrases by strength.
+
+	300 is a good threshold for strong passphrases,
+	200 is a good threshold for acceptable passphrases.
+
+OPTIONS
+	-r
+	--raw
+		Treat escape sequences as part of the passphrases.
+		If not used, ANSI escape sequences are ignored.
+
+	-w
+	--waste-ram
+		Loads the blacklist into RAM and creates a hash set
+		of it. It is unreasonable to do this unless you have
+		the process running indefinitely and (somewhat)
+		continuously feed passphrases. Note that this
+		requires a lot of RAM.
+
+RATIONALE
+	Passphrase-strength meters used on the Web use horrid
+	heuristics and does not even blacklist the most common
+	passphrases. We need better passphrase-strength meters
+	too keep users safe.
+
+SEE ALSO
+	correctpony(1), autopasswd(1), john(1), sort(1)
+
+	Full documentation available locally via: info '(passcheck)'
 
