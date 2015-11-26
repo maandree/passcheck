@@ -83,7 +83,7 @@ You may want to pipe stdout to @command{sort -n} to get the strongest passphrase
 at the bottom.
 
 Use @option{--raw} or @option{-r} if the passphrase may contain a ESC character,
-otherwise it is parsed as an ANSI escape sequence wish is ignored in the rating
+otherwise it is parsed as an ANSI escape sequence which is ignored in the rating
 and allows you to use colours in the passphrases.
 
 Server with vast amount of RAM memory may want to load the entire blacklist
