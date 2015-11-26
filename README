@@ -32,7 +32,7 @@ RATIONALE
 	Passphrase-strength meters used on the Web use horrid
 	heuristics and does not even blacklist the most common
 	passphrases. We need better passphrase-strength meters
-	too keep users safe.
+	to keep users safe.
 
 SEE ALSO
 	correctpony(1), autopasswd(1), john(1), sort(1)
