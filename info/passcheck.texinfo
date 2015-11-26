@@ -88,7 +88,7 @@ and allows you to use colours in the passphrases.
 
 Server with vast amount of RAM memory may want to load the entire blacklist
 into RAM and create a hash set of it. To do this, use @option{--waste-ram} or
-@option{-w}. It is unreasonly to do this unless you have the process running
+@option{-w}. It is unreasonable to do this unless you have the process running
 indefinitely and (somewhat) continuously feed passphrases.
 
 
