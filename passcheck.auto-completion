@@ -1,4 +1,8 @@
 (passcheck
-	(unargumented  (options -r --raw)  (complete --raw)  (desc 'Treat escape sequences as part of the passphrases'))
+	(unargumented  (options -r --raw)  (complete --raw)
+	(desc 'Treat escape sequences as part of the passphrases'))
+
+	(unargumented  (options -w --waste-ram)  (complete --waste-ram)
+	(desc 'Load the data blacklist and create a hashtable'))
 )
 
