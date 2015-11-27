@@ -1,0 +1,55 @@
+.TH PASSCHECK 1 PASSCHECK
+.SH NAME
+passcheck - passphrase strength evaluator
+.SH SYNOPSIS
+.BR passcheck
+.IR "" [ OPTION ]...\ <
+.IR PASSPHRASE_LIST
+.SH DESCRIPTION
+Evaluates the strength of passphrases based.
+All passphrases are given a non-negative integer rating.
+.PP
+The output is formatted so that it is suitable for
+piping into \(aqsort -rn\(aq to sort passphrases by strength.
+.PP
+300 is a good threshold for strong passphrases,
+.br
+200 is a good threshold for acceptable passphrases.
+.SH OPTIONS
+.TP
+.BR \-r ,\  \-\-raw
+Treat escape sequences as part of the passphrases.
+If not used, ANSI escape sequences are ignored.
+.TP
+.BR \-w ,\  \-\-waste-ram
+Loads the blacklist into RAM and creates a hash set
+of it. It is unreasonable to do this unless you have
+the process running indefinitely and (somewhat)
+continuously feed passphrases. Note that this
+requires a lot of RAM.
+.SH RATIONALE
+Passphrase-strength meters used on the Web use horrid
+heuristics and does not even blacklist the most common
+passphrases. We need better passphrase-strength meters
+to keep users safe.
+.SH "SEE ALSO"
+.BR correctpony (1),
+.BR autopasswd (1),
+.BR sort (1),
+.BR john
+.PP
+Full documentation available locally via: info \(aq(passcheck)\(aq
+.SH AUTHORS
+Principal author, Mattias Andrée.  See the COPYING file for the full
+list of authors.
+.SH LICENSE
+Copyright \(co 2013, 2015  Mattias Andrée
+.br
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+.br
+This is free software: you are free to change and redistribute it.
+.br
+There is NO WARRANTY, to the extent permitted by law.
+.SH BUGS
+Please report bugs to https://github.com/maandree/passcheck/issues or to
+maandree@member.fsf.org
