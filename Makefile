@@ -184,7 +184,7 @@ uninstall:
 	-rm -- "$(DESTDIR)$(DATADIR)/zsh/site-functions/_$(COMMAND)"
 	-rm -- "$(DESTDIR)$(DATADIR)/misc/$(PKGNAME).blacklist"
 	-rmdir -- "$(DESTDIR)$(DATADIR)/misc"
-	-rm -- "$(DESTDIR)$(MAN1)/$(COMMAND).1"
+	-rm -- "$(DESTDIR)$(MAN1DIR)/$(COMMAND).1"
 
 
 
