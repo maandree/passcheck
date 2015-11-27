@@ -182,8 +182,8 @@ uninstall:
 	-rm -- "$(DESTDIR)$(DATADIR)/bash-completion/completions/$(COMMAND)"
 	-rm -- "$(DESTDIR)$(DATADIR)/fish/completions/$(COMMAND).fish"
 	-rm -- "$(DESTDIR)$(DATADIR)/zsh/site-functions/_$(COMMAND)"
-	-rmdir -- "$(DESTDIR)$(DATADIR)/misc"
 	-rm -- "$(DESTDIR)$(DATADIR)/misc/$(PKGNAME).blacklist"
+	-rmdir -- "$(DESTDIR)$(DATADIR)/misc"
 	-rm -- "$(DESTDIR)$(MAN1)/$(COMMAND).1"
 
 
