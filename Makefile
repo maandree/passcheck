@@ -8,7 +8,10 @@ BIN = /bin
 DATA = /share
 BINDIR = $(PREFIX)$(BIN)
 DATADIR = $(PREFIX)$(DATA)
+DOCDIR = $(DATADIR)/doc
 INFODIR = $(DATADIR)/info
+MANDIR = $(DATADIR)/man
+MAN1DIR = $(MANDIR)/man1
 LICENSEDIR = $(DATADIR)/licenses
 
 PKGNAME = passcheck
@@ -141,6 +144,11 @@ install-ps: bin/passcheck.ps
 	install -dm755 -- "$(DESTDIR)$(DOCDIR)"
 	install -m644 -- "$<" "$(DESTDIR)$(DOCDIR)/$(PKGNAME).ps"
 
+.PHONY: install-man
+install-man: doc/man/passcheck.1
+	install -dm755 -- "$(DESTDIR)$(MAN1DIR)"
+	install -m644 "$<" -- "$(DESTDIR)$(MAN1DIR)/$(COMMAND).1"
+
 .PHONY: install-shell
 install-shell: install-bash install-fish install-zsh
 
@@ -176,6 +184,7 @@ uninstall:
 	-rm -- "$(DESTDIR)$(DATADIR)/zsh/site-functions/_$(COMMAND)"
 	-rmdir -- "$(DESTDIR)$(DATADIR)/misc"
 	-rm -- "$(DESTDIR)$(DATADIR)/misc/$(PKGNAME).blacklist"
+	-rm -- "$(DESTDIR)$(MAN1)/$(COMMAND).1"
 
 
 
