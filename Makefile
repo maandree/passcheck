@@ -119,7 +119,7 @@ install-license:
 	install -m644 COPYING LICENSE -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)"
 
 .PHONY: install-doc
-install-doc: install-info
+install-doc: install-info install-pdf install-dvi install-ps install-man
 
 .PHONY: install-info
 install-info: bin/passcheck.info
