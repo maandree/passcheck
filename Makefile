@@ -4,107 +4,186 @@
 # without any warranty.
 
 PREFIX = /usr
-DATA = /share
 BIN = /bin
+DATA = /share
+BINDIR = $(PREFIX)$(BIN)
+DATADIR = $(PREFIX)$(DATA)
+INFODIR = $(DATADIR)/info
+LICENSEDIR = $(DATADIR)/licenses
+
 PKGNAME = passcheck
 COMMAND = passcheck
-LICENSES = $(PREFIX)$(DATA)
 
 
 
+.PHONY: default
+default: command data info shell
+
+.PHONY: all
 all: command data doc shell
 
+.PHONY: command
+command: bin/passcheck
 
-command: passcheck.install
-
-passcheck.install: passcheck.py
+bin/passcheck: src/passcheck
+	@mkdir -p bin
 	cp "$<" "$@"
 	sed -i "s:'blacklist':'$(PREFIX)$(DATA)/misc/$(PKGNAME).blacklist':g" "$@"
 
-
+.PHONY: data
 data: blacklist
 
 blacklist: blacklist.lrz
 	@printf '\e[0;1;35m%s\e[0m\n' 'Decompression blacklist.lrz, this can take a very long time (over 1 CPU-hour)'
 	lrzip -d "$<"
 
+.PHONY: doc
+doc: info pdf dvi ps
 
-doc: info
-
+.PHONY: info
 info: passcheck.info
+bin/%.info: doc/info/%.texinfo
+	@mkdir -p bin
+	$(MAKEINFO) $<
+	mv $*.info $@
 
-%.info: info/%.texinfo
-	makeinfo "$<"
+.PHONY: pdf
+pdf: bin/passcheck.pdf
+bin/%.pdf: doc/info/%.texinfo
+	@! test -d obj/pdf || rm -rf obj/pdf
+	@mkdir -p bin obj/pdf
+	cd obj/pdf && texi2pdf ../../"$<" < /dev/null
+	mv obj/pdf/$*.pdf $@
 
+.PHONY: dvi
+dvi: bin/passcheck.dvi
+bin/%.dvi: doc/info/%.texinfo
+	@! test -d obj/dvi || rm -rf obj/dvi
+	@mkdir -p bin obj/dvi
+	cd obj/dvi && $(TEXI2DVI) ../../"$<" < /dev/null
+	mv obj/dvi/$*.dvi $@
 
+.PHONY: ps
+ps: bin/passcheck.ps
+bin/%.ps: doc/info/%.texinfo
+	@! test -d obj/ps || rm -rf obj/ps
+	@mkdir -p bin obj/ps
+	cd obj/ps && texi2pdf --ps ../../"$<" < /dev/null
+	mv obj/ps/$*.ps $@
+
+.PHONY: shell
 shell: bash fish zsh
 
-bash: passcheck.bash-completion
-fish: passcheck.fish-completion
-zsh: passcheck.zsh-completion
+.PHONY: bash
+bash: bin/passcheck.bash-completion
 
-passcheck.auto-completion.install: passcheck.auto-completion
-	cp "$<" "$@"
-	sed -i 's/^(passcheck$$/($(COMMAND)/' "$@"
+.PHONY: fish
+fish: bin/passcheck.fish-completion
 
-passcheck.%sh-completion: passcheck.auto-completion.install
-	auto-auto-complete "$*sh" --output "$@" --source "$<"
+.PHONY: zsh
+zsh: bin/passcheck.zsh-completion
+
+obj/passcheck.auto-completion: src/passcheck.auto-completion
+	@mkdir -p obj
+	cp $< $@
+	sed -i 's/^(passcheck$$/($(COMMAND)/' $@
+
+bin/passcheck.%sh-completion: obj/passcheck.auto-completion
+	@mkdir -p bin
+	auto-auto-complete $*sh --output $@ --source $<
 
 
 
-install: install-cmd install-data install-license install-doc install-shell
+.PHONY: install
+install: install-cmd install-data install-license install-info install-shell
 
-install-cmd: passcheck.install
+.PHONY: install-all
+install-all: install-cmd install-data install-license install-doc install-shell
+
+.PHONY: install-cmd
+install-cmd: bin/passcheck
 	install -dm755 -- "$(DESTDIR)$(PREFIX)$(BIN)"
-	install -m755 passcheck.install -- "$(DESTDIR)$(PREFIX)$(BIN)/$(COMMAND)"
+	install -m755 $< -- "$(DESTDIR)$(PREFIX)$(BIN)/$(COMMAND)"
 
+.PHONY: install-data
 install-data: install-blacklist
 
+.PHONY: install-blacklist
 install-blacklist: blacklist
-	install -dm755 -- "$(DESTDIR)$(PREFIX)$(DATA)/misc"
-	install -m644 blacklist -- "$(DESTDIR)$(PREFIX)$(DATA)/misc/$(PKGNAME).blacklist"
+	install -dm755 -- "$(DESTDIR)$(PREFIX)$(DATADIR)/misc"
+	install -m644 $< -- "$(DESTDIR)$(DATADIR)/misc/$(PKGNAME).blacklist"
 
+.PHONY: install-license
 install-license:
-	install -dm755 -- "$(DESTDIR)$(LICENSES)/$(PKGNAME)"
-	install -m644 COPYING LICENSE -- "$(DESTDIR)$(LICENSES)/$(PKGNAME)"
+	install -dm755 -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)"
+	install -m644 COPYING LICENSE -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)"
 
+.PHONY: install-doc
 install-doc: install-info
 
-install-info: passcheck.info
-	install -dm755 -- "$(DESTDIR)$(PREFIX)$(DATA)/info"
-	install -m644 passcheck.info -- "$(DESTDIR)$(PREFIX)$(DATA)/info/$(PKGNAME).info"
+.PHONY: install-info
+install-info: bin/passcheck.info
+	install -dm755 -- "$(DESTDIR)$(INFODIR)"
+	install -m644 $< -- "$(DESTDIR)$(INFODIR)/$(PKGNAME).info"
 
+.PHONY: install-pdf
+install-pdf: bin/passcheck.pdf
+	install -dm755 -- "$(DESTDIR)$(DOCDIR)"
+	install -m644 -- "$<" "$(DESTDIR)$(DOCDIR)/$(PKGNAME).pdf"
+
+.PHONY: install-dvi
+install-dvi: bin/passcheck.dvi
+	install -dm755 -- "$(DESTDIR)$(DOCDIR)"
+	install -m644 -- "$<" "$(DESTDIR)$(DOCDIR)/$(PKGNAME).dvi"
+
+.PHONY: install-ps
+install-ps: bin/passcheck.ps
+	install -dm755 -- "$(DESTDIR)$(DOCDIR)"
+	install -m644 -- "$<" "$(DESTDIR)$(DOCDIR)/$(PKGNAME).ps"
+
+.PHONY: install-shell
 install-shell: install-bash install-fish install-zsh
 
-install-bash: passcheck.bash-completion
-	install -Dm644 passcheck.bash-completion -- "$(DESTDIR)$(PREFIX)$(DATA)/bash-completion/completions/$(COMMAND)"
+.PHONY: install-bash
+install-bash: bin/passcheck.bash-completion
+	install -dm755 -- "$(DESTDIR)$(DATADIR)/bash-completion/completions"
+	install -dm644 $< -- "$(DESTDIR)$(DATADIR)/bash-completion/completions/$(COMMAND)"
 
-install-fish: passcheck.fish-completion
-	install -Dm644 passcheck.fish-completion -- "$(DESTDIR)$(PREFIX)$(DATA)/fish/completions/$(COMMAND).fish"
+.PHONY: install-fish
+install-fish: bin/passcheck.fish-completion
+	install -dm755 -- "$(DESTDIR)$(DATADIR)/fish/completions"
+	install -m644 $< -- "$(DESTDIR)$(DATADIR)/fish/completions/$(COMMAND).fish"
 
-install-zsh: passcheck.zsh-completion
-	install -Dm644 passcheck.zsh-completion -- "$(DESTDIR)$(PREFIX)$(DATA)/zsh/site-functions/_$(COMMAND)"
+.PHONY: install-zsh
+install-zsh: bin/passcheck.zsh-completion
+	install -dm755 -- "$(DESTDIR)$(DATADIR)/zsh/site-functions"
+	install -m644 $< -- "$(DESTDIR)$(DATADIR)/zsh/site-functions/_$(COMMAND)"
 
 
 
+.PHONY: uninstall
 uninstall:
-	-rm -- "$(DESTDIR)$(PREFIX)$(BIN)/$(COMMAND)"
-	-rm -- "$(DESTDIR)$(LICENSES)/$(PKGNAME)/COPYING"
-	-rm -- "$(DESTDIR)$(LICENSES)/$(PKGNAME)/LICENSE"
-	-rmdir -- "$(DESTDIR)$(LICENSES)/$(PKGNAME)"
-	-rm -- "$(DESTDIR)$(PREFIX)$(DATA)/info/$(PKGNAME).info"
-	-rm -- "$(DESTDIR)$(PREFIX)$(DATA)/bash-completion/completions/$(COMMAND)"
-	-rm -- "$(DESTDIR)$(PREFIX)$(DATA)/fish/completions/$(COMMAND).fish"
-	-rm -- "$(DESTDIR)$(PREFIX)$(DATA)/zsh/site-functions/_$(COMMAND)"
-	-rmdir -- "$(DESTDIR)$(PREFIX)$(DATA)/misc"
-	-rm -- "$(DESTDIR)$(PREFIX)$(DATA)/misc/$(PKGNAME).blacklist"
+	-rm -- "$(DESTDIR)$(BINDIR)/$(COMMAND)"
+	-rm -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)/COPYING"
+	-rm -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)/LICENSE"
+	-rmdir -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)"
+	-rm -- "$(DESTDIR)$(INFODIR)/$(PKGNAME).info"
+	-rm -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME).pdf"
+	-rm -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME).dvi"
+	-rm -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME).ps"
+	-rm -- "$(DESTDIR)$(DATADIR)/bash-completion/completions/$(COMMAND)"
+	-rm -- "$(DESTDIR)$(DATADIR)/fish/completions/$(COMMAND).fish"
+	-rm -- "$(DESTDIR)$(DATADIR)/zsh/site-functions/_$(COMMAND)"
+	-rmdir -- "$(DESTDIR)$(DATADIR)/misc"
+	-rm -- "$(DESTDIR)$(DATADIR)/misc/$(PKGNAME).blacklist"
 
 
 
+.PHONY: clean
 clean:
-	-rm -f passcheck.info.gz *.install passcheck.*sh-completion
+	-rm -r bin obj
 
-
-
-.PHONY: all command data doc info shell bash fish zsh install install-cmd install-data install-blacklist install-license install-doc install-info install-shell install-bash install-fish install-zsh uninstall clean
+.PHONY: distclean
+distclean: clean
+	-rm blacklist blacklist.lrz
 
