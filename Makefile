@@ -105,15 +105,15 @@ install-all: install-cmd install-data install-license install-doc install-shell
 
 .PHONY: install-cmd
 install-cmd: bin/passcheck
-	install -dm755 -- "$(DESTDIR)$(PREFIX)$(BIN)"
-	install -m755 $< -- "$(DESTDIR)$(PREFIX)$(BIN)/$(COMMAND)"
+	install -dm755 -- "$(DESTDIR)$(BINDIR)"
+	install -m755 $< -- "$(DESTDIR)$(BINDIR)/$(COMMAND)"
 
 .PHONY: install-data
 install-data: install-blacklist
 
 .PHONY: install-blacklist
 install-blacklist: blacklist
-	install -dm755 -- "$(DESTDIR)$(PREFIX)$(DATADIR)/misc"
+	install -dm755 -- "$(DESTDIR)$(DATADIR)/misc"
 	install -m644 $< -- "$(DESTDIR)$(DATADIR)/misc/$(PKGNAME).blacklist"
 
 .PHONY: install-license
@@ -155,7 +155,7 @@ install-shell: install-bash install-fish install-zsh
 .PHONY: install-bash
 install-bash: bin/passcheck.bash-completion
 	install -dm755 -- "$(DESTDIR)$(DATADIR)/bash-completion/completions"
-	install -dm644 $< -- "$(DESTDIR)$(DATADIR)/bash-completion/completions/$(COMMAND)"
+	install -m644 $< -- "$(DESTDIR)$(DATADIR)/bash-completion/completions/$(COMMAND)"
 
 .PHONY: install-fish
 install-fish: bin/passcheck.fish-completion
