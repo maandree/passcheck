@@ -44,7 +44,7 @@ blacklist: blacklist.lrz
 doc: info pdf dvi ps
 
 .PHONY: info
-info: passcheck.info
+info: bin/passcheck.info
 bin/%.info: doc/info/%.texinfo
 	@mkdir -p bin
 	$(MAKEINFO) $<
