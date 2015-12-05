@@ -208,6 +208,10 @@ if waste_ram:
 else:
     blacklist = set([])
     fd = os.open('blacklist', os.O_RDONLY)
+    try:
+        os.posix_fadvise(fd, 0, 0, os.POSIX_FADV_RANDOM)
+    except:
+        pass
     blacklist_files.append((fd, os.fstat(fd).st_size))
 for directory in ['/usr/share/dict/', '/usr/local/share/dict/']:
     dictionaries = None
